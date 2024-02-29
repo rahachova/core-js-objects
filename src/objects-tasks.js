@@ -33,8 +33,25 @@ function shallowCopy(obj) {
  *    mergeObjects([{a: 1, b: 2}, {b: 3, c: 5}]) => {a: 1, b: 5, c: 5}
  *    mergeObjects([]) => {}
  */
-function mergeObjects(/* objects */) {
-  // throw new Error('Not implemented');
+function mergeObjects(objects) {
+  if (!objects.length) {
+    return {};
+  }
+  const result = {};
+  const array = objects
+    .map((item) => {
+      return Object.entries(item);
+    })
+    .flat(1);
+  array.forEach(([key, value]) => {
+    if (result[key] && value) {
+      result[key] += value;
+    } else if (value) {
+      result[key] = value;
+    }
+  });
+
+  return result;
 }
 
 /**
@@ -204,8 +221,10 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const object = JSON.parse(json);
+  const objectValues = Object.values(object);
+  return new proto.constructor(...objectValues);
 }
 
 /**
